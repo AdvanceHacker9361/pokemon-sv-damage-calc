@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ポケモンSV ダメージ計算ツール | シングルバトル Reg.I</title>
+  <meta name="description" content="ポケモンスカーレット・バイオレット(SV) シングルバトル専門のダメージ計算ツール。Reg.I使用率上位80匹対応、テラスタル・天候・フィールド対応。">
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+  <header class="header">
+    <h1>⚔️ ポケモンSV ダメージ計算ツール</h1>
+    <p>シングルバトル専門 ― Reg.I シーズン39 使用率上位80匹対応</p>
+  </header>
+
+  <div class="main-container">
+
+    <!-- ===== 攻撃側 ===== -->
+    <div class="panel attack-panel">
+      <div class="panel-title"><span class="icon">⚔️</span> 攻撃側</div>
+
+      <div class="form-row">
+        <label>ポケモン</label>
+        <select id="atk-pokemon"></select>
+      </div>
+      <div class="base-stats" id="atk-base-stats"></div>
+      <div class="form-row">
+        <label>レベル</label>
+        <input type="number" id="atk-level" value="50" min="1" max="100">
+        <label>性格</label>
+        <select id="atk-nature"></select>
+      </div>
+      <div class="form-row">
+        <label>特性</label>
+        <select id="atk-ability"></select>
+      </div>
+      <div class="form-row">
+        <label>持ち物</label>
+        <select id="atk-item"></select>
+      </div>
+      <div class="form-row tera-toggle">
+        <label>テラスタル</label>
+        <input type="checkbox" id="atk-tera-active">
+        <select id="atk-tera-type"></select>
+      </div>
+
+      <!-- EV プリセット -->
+      <div class="ev-presets" id="atk-ev-presets">
+        <button class="ev-preset-btn" data-side="atk" data-preset="ha">H252A252</button>
+        <button class="ev-preset-btn" data-side="atk" data-preset="hc">H252C252</button>
+        <button class="ev-preset-btn" data-side="atk" data-preset="as">A252S252</button>
+        <button class="ev-preset-btn" data-side="atk" data-preset="cs">C252S252</button>
+        <button class="ev-preset-btn" data-side="atk" data-preset="reset">リセット</button>
+      </div>
+
+      <!-- 努力値 -->
+      <div class="stat-grid" id="atk-evs">
+        <div class="stat-label"></div>
+        <div class="stat-header">H</div>
+        <div class="stat-header">A</div>
+        <div class="stat-header">B</div>
+        <div class="stat-header">C</div>
+        <div class="stat-header">D</div>
+        <div class="stat-header">S</div>
+        <div class="stat-label">努力値</div>
+        <input type="number" data-stat="0" value="0" min="0" max="252" step="4">
+        <input type="number" data-stat="1" value="0" min="0" max="252" step="4">
+        <input type="number" data-stat="2" value="0" min="0" max="252" step="4">
+        <input type="number" data-stat="3" value="0" min="0" max="252" step="4">
+        <input type="number" data-stat="4" value="0" min="0" max="252" step="4">
+        <input type="number" data-stat="5" value="0" min="0" max="252" step="4">
+        <div class="stat-label">個体値</div>
+        <input type="number" class="iv" data-stat="0" value="31" min="0" max="31">
+        <input type="number" class="iv" data-stat="1" value="31" min="0" max="31">
+        <input type="number" class="iv" data-stat="2" value="31" min="0" max="31">
+        <input type="number" class="iv" data-stat="3" value="31" min="0" max="31">
+        <input type="number" class="iv" data-stat="4" value="31" min="0" max="31">
+        <input type="number" class="iv" data-stat="5" value="31" min="0" max="31">
+        <div class="stat-label">実数値</div>
+        <input type="text" class="actual-stat" data-stat="0" readonly>
+        <input type="text" class="actual-stat" data-stat="1" readonly>
+        <input type="text" class="actual-stat" data-stat="2" readonly>
+        <input type="text" class="actual-stat" data-stat="3" readonly>
+        <input type="text" class="actual-stat" data-stat="4" readonly>
+        <input type="text" class="actual-stat" data-stat="5" readonly>
+      </div>
+
+      <!-- ランク -->
+      <div class="form-row">
+        <label>ランク補正</label>
+        <div class="rank-row">
+          <span style="font-size:0.65rem;color:var(--text-muted)">A</span>
+          <select id="atk-rank-a" class="rank-select">
+            <option value="0" selected>±0</option>
+          </select>
+          <span style="font-size:0.65rem;color:var(--text-muted)">C</span>
+          <select id="atk-rank-c" class="rank-select">
+            <option value="0" selected>±0</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 技選択 -->
+      <div class="move-section">
+        <h3>💥 技</h3>
+        <div class="move-slot">
+          <select id="move-1"></select>
+          <button class="calc-btn" data-move="1">計算</button>
+        </div>
+        <div class="move-slot">
+          <select id="move-2"></select>
+          <button class="calc-btn" data-move="2">計算</button>
+        </div>
+        <div class="move-slot">
+          <select id="move-3"></select>
+          <button class="calc-btn" data-move="3">計算</button>
+        </div>
+        <div class="move-slot">
+          <select id="move-4"></select>
+          <button class="calc-btn" data-move="4">計算</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 防御側 ===== -->
+    <div class="panel defend-panel">
+      <div class="panel-title"><span class="icon">🛡️</span> 防御側</div>
+
+      <div class="form-row">
+        <label>ポケモン</label>
+        <select id="def-pokemon"></select>
+      </div>
+      <div class="base-stats" id="def-base-stats"></div>
+      <div class="form-row">
+        <label>レベル</label>
+        <input type="number" id="def-level" value="50" min="1" max="100">
+        <label>性格</label>
+        <select id="def-nature"></select>
+      </div>
+      <div class="form-row">
+        <label>特性</label>
+        <select id="def-ability"></select>
+      </div>
+      <div class="form-row">
+        <label>持ち物</label>
+        <select id="def-item"></select>
+      </div>
+      <div class="form-row tera-toggle">
+        <label>テラスタル</label>
+        <input type="checkbox" id="def-tera-active">
+        <select id="def-tera-type"></select>
+      </div>
+
+      <!-- EV プリセット -->
+      <div class="ev-presets" id="def-ev-presets">
+        <button class="ev-preset-btn" data-side="def" data-preset="hb">H252B252</button>
+        <button class="ev-preset-btn" data-side="def" data-preset="hd">H252D252</button>
+        <button class="ev-preset-btn" data-side="def" data-preset="hbs">H252B252S4</button>
+        <button class="ev-preset-btn" data-side="def" data-preset="reset">リセット</button>
+      </div>
+
+      <!-- 努力値 -->
+      <div class="stat-grid" id="def-evs">
+        <div class="stat-label"></div>
+        <div class="stat-header">H</div>
+        <div class="stat-header">A</div>
+        <div class="stat-header">B</div>
+        <div class="stat-header">C</div>
+        <div class="stat-header">D</div>
+        <div class="stat-header">S</div>
+        <div class="stat-label">努力値</div>
+        <input type="number" data-stat="0" value="0" min="0" max="252" step="4">
+        <input type="number" data-stat="1" value="0" min="0" max="252" step="4">
+        <input type="number" data-stat="2" value="0" min="0" max="252" step="4">
+        <input type="number" data-stat="3" value="0" min="0" max="252" step="4">
+        <input type="number" data-stat="4" value="0" min="0" max="252" step="4">
+        <input type="number" data-stat="5" value="0" min="0" max="252" step="4">
+        <div class="stat-label">個体値</div>
+        <input type="number" class="iv" data-stat="0" value="31" min="0" max="31">
+        <input type="number" class="iv" data-stat="1" value="31" min="0" max="31">
+        <input type="number" class="iv" data-stat="2" value="31" min="0" max="31">
+        <input type="number" class="iv" data-stat="3" value="31" min="0" max="31">
+        <input type="number" class="iv" data-stat="4" value="31" min="0" max="31">
+        <input type="number" class="iv" data-stat="5" value="31" min="0" max="31">
+        <div class="stat-label">実数値</div>
+        <input type="text" class="actual-stat" data-stat="0" readonly>
+        <input type="text" class="actual-stat" data-stat="1" readonly>
+        <input type="text" class="actual-stat" data-stat="2" readonly>
+        <input type="text" class="actual-stat" data-stat="3" readonly>
+        <input type="text" class="actual-stat" data-stat="4" readonly>
+        <input type="text" class="actual-stat" data-stat="5" readonly>
+      </div>
+
+      <!-- ランク -->
+      <div class="form-row">
+        <label>ランク補正</label>
+        <div class="rank-row">
+          <span style="font-size:0.65rem;color:var(--text-muted)">B</span>
+          <select id="def-rank-b" class="rank-select">
+            <option value="0" selected>±0</option>
+          </select>
+          <span style="font-size:0.65rem;color:var(--text-muted)">D</span>
+          <select id="def-rank-d" class="rank-select">
+            <option value="0" selected>±0</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 追加条件 -->
+      <div class="form-row">
+        <label>HP満タン</label>
+        <input type="checkbox" id="def-fullhp" checked>
+        <span style="font-size:0.7rem;color:var(--text-muted)">（マルチスケイル等）</span>
+      </div>
+    </div>
+
+    <!-- ===== バトル条件 ===== -->
+    <div class="panel conditions-panel">
+      <div class="panel-title"><span class="icon">⚙️</span> バトル条件</div>
+      <div class="conditions-grid">
+        <div class="condition-item">
+          <label>天候</label>
+          <select id="weather">
+            <option value="なし">なし</option>
+            <option value="はれ">はれ</option>
+            <option value="あめ">あめ</option>
+            <option value="すなあらし">すなあらし</option>
+            <option value="ゆき">ゆき</option>
+          </select>
+        </div>
+        <div class="condition-item">
+          <label>フィールド</label>
+          <select id="field">
+            <option value="なし">なし</option>
+            <option value="エレキフィールド">エレキフィールド</option>
+            <option value="グラスフィールド">グラスフィールド</option>
+            <option value="サイコフィールド">サイコフィールド</option>
+            <option value="ミストフィールド">ミストフィールド</option>
+          </select>
+        </div>
+      </div>
+      <div class="checkbox-group">
+        <label><input type="checkbox" id="is-critical"> 急所</label>
+        <label><input type="checkbox" id="is-burned"> やけど</label>
+        <label><input type="checkbox" id="is-reflect"> リフレクター</label>
+        <label><input type="checkbox" id="is-lightscreen"> ひかりのかべ</label>
+        <label><input type="checkbox" id="is-auroraveil"> オーロラベール</label>
+      </div>
+    </div>
+
+    <!-- 全計算ボタン -->
+    <button class="calc-all-btn" id="calc-all-btn">⚡ すべての技でダメージ計算</button>
+
+    <!-- ===== 結果表示 ===== -->
+    <div class="panel results-panel">
+      <div class="results-header"><span>📊</span> 計算結果</div>
+      <div id="results-container">
+        <div class="no-result">技を選択して「計算」ボタンを押してください</div>
+      </div>
+    </div>
+
+    <!-- ===== ダメージ加算パネル ===== -->
+    <div class="panel accumulator-panel">
+      <div class="accumulator-header">
+        <span>🧮</span> ダメージ加算 <span class="accumulator-count" id="acc-count">(0/5)</span>
+        <button class="acc-clear-btn" id="acc-clear-btn">全てクリア</button>
+      </div>
+      <div class="accumulator-hint" id="acc-hint">
+        計算結果の「＋加算」ボタンで最大5回分のダメージを蓄積できます
+      </div>
+
+      <!-- 定数ダメージ/回復追加 -->
+      <div class="acc-constant-section">
+        <div class="acc-constant-row">
+          <select id="acc-constant-preset">
+            <option value="">--- 定数ダメージ/回復 ---</option>
+            <optgroup label="📌 設置技">
+              <option value="sr4">ステルスロック (4倍弱点: 1/2)</option>
+              <option value="sr2">ステルスロック (2倍弱点: 1/4)</option>
+              <option value="sr1">ステルスロック (等倍: 1/8)</option>
+              <option value="sr05">ステルスロック (半減: 1/16)</option>
+              <option value="sr025">ステルスロック (1/4倍: 1/32)</option>
+              <option value="sp1">まきびし (1層: 1/8)</option>
+              <option value="sp2">まきびし (2層: 1/6)</option>
+              <option value="sp3">まきびし (3層: 1/4)</option>
+            </optgroup>
+            <optgroup label="🔥 状態異常">
+              <option value="poison">どく (1/8)</option>
+              <option value="toxic1">もうどく 1T目 (1/16)</option>
+              <option value="toxic2">もうどく 2T目 (2/16)</option>
+              <option value="toxic3">もうどく 3T目 (3/16)</option>
+              <option value="toxic4">もうどく 4T目 (4/16)</option>
+              <option value="burn">やけどダメ (1/16)</option>
+            </optgroup>
+            <optgroup label="🌤 天候/フィールド">
+              <option value="weather">天候ダメ (1/16)</option>
+            </optgroup>
+            <optgroup label="💚 回復">
+              <option value="leftovers">たべのこし回復 (-1/16)</option>
+              <option value="bsludge">くろいヘドロ回復 (-1/16)</option>
+              <option value="sitrus">オボンのみ (-1/4)</option>
+              <option value="grassy">グラスフィールド回復 (-1/16)</option>
+            </optgroup>
+          </select>
+          <button class="acc-const-add-btn" id="acc-add-preset">追加</button>
+        </div>
+        <div class="acc-constant-row">
+          <input type="number" id="acc-custom-value" placeholder="HP量 (マイナスで回復)">
+          <input type="text" id="acc-custom-label" placeholder="ラベル" maxlength="20">
+          <button class="acc-const-add-btn" id="acc-add-custom">追加</button>
+        </div>
+      </div>
+
+      <div id="acc-slots"></div>
+      <div class="acc-total-container" id="acc-total" style="display:none">
+        <div class="acc-total-row">
+          <span class="acc-total-label">合計ダメージ</span>
+          <span class="acc-total-damage" id="acc-total-damage">0 ~ 0</span>
+        </div>
+        <div class="acc-total-row">
+          <span class="acc-total-label">合計割合</span>
+          <span class="acc-total-percent" id="acc-total-percent">0% ~ 0%</span>
+        </div>
+        <div class="acc-total-row">
+          <span class="acc-total-label">HP残量</span>
+          <span id="acc-total-hp">---</span>
+        </div>
+        <div class="hp-bar-container">
+          <div class="hp-bar hp-green" id="acc-hp-bar" style="width:100%"></div>
+        </div>
+        <div class="acc-total-ko" id="acc-total-ko"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="constants.js"></script>
+  <script src="pokemon-data.js"></script>
+  <script src="move-data.js"></script>
+  <script src="calc-engine.js"></script>
+  <script src="app.js"></script>
+
+</body>
+
+</html>

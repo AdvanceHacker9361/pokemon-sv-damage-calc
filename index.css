@@ -119,10 +119,33 @@ body {
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 2px solid var(--border-color);
+  position: relative;
 }
 
 .panel-title .icon {
   font-size: 1.2rem;
+}
+
+.swap-btn {
+  position: absolute;
+  right: 0;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.swap-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent-glow);
+  color: #fff;
 }
 
 .attack-panel .panel-title {

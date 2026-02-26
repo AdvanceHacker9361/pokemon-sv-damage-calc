@@ -192,6 +192,12 @@ function setupEventListeners() {
     // 定数ダメージプリセット追加
     document.getElementById('acc-add-preset').addEventListener('click', addConstantPreset);
     document.getElementById('acc-add-custom').addEventListener('click', addConstantCustom);
+
+    // 攻撃側・防御側の入れ替えボタン
+    const swapBtn = document.getElementById('swap-btn');
+    if (swapBtn) {
+        swapBtn.addEventListener('click', swapSides);
+    }
 }
 
 // ============================
@@ -248,12 +254,141 @@ function updateActualStats(side) {
     const ivInputs = grid.querySelectorAll('input.iv');
     const actualInputs = grid.querySelectorAll('input.actual-stat');
 
+    let totalEV = 0;
+    const evVals = [];
+
+    // First pass: collect EVs and cap individual at 252
     for (let i = 0; i < 6; i++) {
-        const ev = parseInt(evInputs[i].value) || 0;
+        let ev = parseInt(evInputs[i].value) || 0;
+        if (ev > 252) ev = 252;
+        if (ev < 0) ev = 0;
+        evVals.push(ev);
+        totalEV += ev;
+    }
+
+    // Second pass: if total > 508, reduce the currently focused input or the last modified one
+    if (totalEV > 508) {
+        const excess = totalEV - 508;
+        // Find the input that caused the overflow (likely the active element)
+        let activeIdx = -1;
+        for (let i = 0; i < 6; i++) {
+            if (document.activeElement === evInputs[i]) {
+                activeIdx = i;
+                break;
+            }
+        }
+
+        if (activeIdx !== -1) {
+            evVals[activeIdx] -= excess;
+            if (evVals[activeIdx] < 0) evVals[activeIdx] = 0;
+        } else {
+            // Fallback (e.g. preset applied incorrectly), just reduce from the end
+            let remainingExcess = excess;
+            for (let i = 5; i >= 0 && remainingExcess > 0; i--) {
+                const reduce = Math.min(evVals[i], remainingExcess);
+                evVals[i] -= reduce;
+                remainingExcess -= reduce;
+            }
+        }
+    }
+
+    // Third pass: apply validated EVs and calculate stats
+    let finalTotalEV = 0;
+    for (let i = 0; i < 6; i++) {
+        evInputs[i].value = evVals[i];
+        finalTotalEV += evVals[i];
+
         const iv = parseInt(ivInputs[i].value) || 0;
-        const stat = calcStat(pokemon.bs[i], iv, ev, level, nature, i);
+        const stat = calcStat(pokemon.bs[i], iv, evVals[i], level, nature, i);
         actualInputs[i].value = stat;
     }
+
+    // Update Remaining EV display
+    const remainingEl = document.getElementById(`${side}-ev-remaining`);
+    if (remainingEl) {
+        remainingEl.textContent = `残り: ${508 - finalTotalEV}`;
+    }
+}
+
+// ============================
+// 入れ替え機能 (Swap)
+// ============================
+
+function swapSides() {
+    const fields = [
+        'pokemon', 'level', 'nature', 'item', 'tera-active', 'tera-type'
+    ];
+
+    // 1. 基本設定の入れ替え
+    fields.forEach(field => {
+        const atkEl = document.getElementById(`atk-${field}`);
+        const defEl = document.getElementById(`def-${field}`);
+        if (!atkEl || !defEl) return;
+
+        if (atkEl.type === 'checkbox') {
+            const temp = atkEl.checked;
+            atkEl.checked = defEl.checked;
+            defEl.checked = temp;
+        } else {
+            const temp = atkEl.value;
+            atkEl.value = defEl.value;
+            defEl.value = temp;
+        }
+    });
+
+    // 2. 特性の入れ替えとドロップダウンの再構築
+    const atkPokemon = POKEMON[document.getElementById('atk-pokemon').value];
+    const defPokemon = POKEMON[document.getElementById('def-pokemon').value];
+
+    // Save current ability values before they are reset by updateAbilityList
+    const atkAbilityVal = document.getElementById('atk-ability').value;
+    const defAbilityVal = document.getElementById('def-ability').value;
+
+    if (atkPokemon) updateAbilityList('atk', atkPokemon);
+    if (defPokemon) updateAbilityList('def', defPokemon);
+
+    // Swap abilities
+    document.getElementById('atk-ability').value = defAbilityVal;
+    document.getElementById('def-ability').value = atkAbilityVal;
+
+    // 3. 個体値(IV)と努力値(EV)の入れ替え
+    const atkGrid = document.getElementById('atk-evs');
+    const defGrid = document.getElementById('def-evs');
+    const atkEvs = atkGrid.querySelectorAll('input[type="number"]:not(.iv)');
+    const atkIvs = atkGrid.querySelectorAll('input.iv');
+    const defEvs = defGrid.querySelectorAll('input[type="number"]:not(.iv)');
+    const defIvs = defGrid.querySelectorAll('input.iv');
+
+    for (let i = 0; i < 6; i++) {
+        const tempEv = atkEvs[i].value;
+        atkEvs[i].value = defEvs[i].value;
+        defEvs[i].value = tempEv;
+
+        const tempIv = atkIvs[i].value;
+        atkIvs[i].value = defIvs[i].value;
+        defIvs[i].value = tempIv;
+    }
+
+    // 4. ランク補正のリセット (仕様通り)
+    document.getElementById('atk-rank-a').value = '0';
+    document.getElementById('atk-rank-c').value = '0';
+    document.getElementById('def-rank-b').value = '0';
+    document.getElementById('def-rank-d').value = '0';
+
+    // 5. Searchable Select の表示更新
+    const atkSel = document.getElementById('atk-pokemon');
+    const defSel = document.getElementById('def-pokemon');
+    if (atkSel._searchableSelect) atkSel._searchableSelect.refresh();
+    if (defSel._searchableSelect) defSel._searchableSelect.refresh();
+
+    const atkItemSel = document.getElementById('atk-item');
+    const defItemSel = document.getElementById('def-item');
+    if (atkItemSel._searchableSelect) atkItemSel._searchableSelect.refresh();
+    if (defItemSel._searchableSelect) defItemSel._searchableSelect.refresh();
+
+    // 6. 実数値の再描画
+    updateActualStats('atk');
+    updateActualStats('def');
 }
 
 // ============================

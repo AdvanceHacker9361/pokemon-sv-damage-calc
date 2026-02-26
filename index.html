@@ -13,14 +13,17 @@
 
   <header class="header">
     <h1>⚔️ ポケモンSV ダメージ計算ツール</h1>
-    <p>シングルバトル専門 ― Reg.I 全ポケモン対応 v1.4</p>
+    <p>シングルバトル専門 ― Reg.I 全ポケモン対応 v1.5</p>
   </header>
 
   <div class="main-container">
 
     <!-- ===== 攻撃側 ===== -->
     <div class="panel attack-panel">
-      <div class="panel-title"><span class="icon">⚔️</span> 攻撃側</div>
+      <div class="panel-title">
+        <span class="icon">⚔️</span> 攻撃側
+        <button class="swap-btn" id="swap-btn" title="攻撃側と防御側を入れ替える">⇄ 入れ替え</button>
+      </div>
 
       <div class="form-row">
         <label>ポケモン</label>
@@ -65,7 +68,8 @@
         <div class="stat-header">C</div>
         <div class="stat-header">D</div>
         <div class="stat-header">S</div>
-        <div class="stat-label">努力値</div>
+        <div class="stat-label">努力値<br><span id="atk-ev-remaining" style="font-size:0.6rem;color:var(--accent)">残り:
+            508</span></div>
         <input type="number" data-stat="0" value="0" min="0" max="252" step="4">
         <input type="number" data-stat="1" value="0" min="0" max="252" step="4">
         <input type="number" data-stat="2" value="0" min="0" max="252" step="4">
@@ -171,7 +175,8 @@
         <div class="stat-header">C</div>
         <div class="stat-header">D</div>
         <div class="stat-header">S</div>
-        <div class="stat-label">努力値</div>
+        <div class="stat-label">努力値<br><span id="def-ev-remaining" style="font-size:0.6rem;color:var(--accent)">残り:
+            508</span></div>
         <input type="number" data-stat="0" value="0" min="0" max="252" step="4">
         <input type="number" data-stat="1" value="0" min="0" max="252" step="4">
         <input type="number" data-stat="2" value="0" min="0" max="252" step="4">

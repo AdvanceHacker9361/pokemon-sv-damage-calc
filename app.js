@@ -231,6 +231,7 @@ function updateAbilityList(side, pokemon) {
     sel.innerHTML = '';
     pokemon.abilities.forEach(a => sel.add(new Option(a, a)));
     if (pokemon.defaultAbility) sel.value = pokemon.defaultAbility;
+    if (sel._searchableSelect) sel._searchableSelect.refresh();
 }
 
 function updateActualStats(side) {

@@ -12,6 +12,7 @@ class SearchableSelect {
         this.filteredItems = [];
         this.highlightedIndex = -1;
         this.isOpen = false;
+        this.select._searchableSelect = this; // バインドして外部から操作可能に
         this.build();
         this.syncItems();
         // 初期値を表示

@@ -309,12 +309,14 @@ function calculateDamage(params) {
         }
 
         // ---- いのちのたま ----
-        if (atkItemData && atkItemData.type === 'lifeOrb') {
-            dmg = pokeRound(dmg * atkItemData.value);
-        }
-        // たつじんのおび (抜群時)
-        if (atkItemData && atkItemData.type === 'expertBelt' && effectiveness > 1) {
-            dmg = pokeRound(dmg * atkItemData.value);
+        if (atkItemData) {
+            if (atkItemData.type === 'lifeOrb') dmg = pokeRound(dmg * atkItemData.value);
+            if (atkItemData.type === 'expertBelt' && effectiveness > 1) dmg = pokeRound(dmg * atkItemData.value);
+            if (atkItemData.type === 'typeBoostItem' && moveType === atkItemData.boostType) dmg = pokeRound(dmg * atkItemData.value);
+            if (atkItemData.type === 'muscleBand' && isPhysical) dmg = pokeRound(dmg * atkItemData.value);
+            if (atkItemData.type === 'wiseGlasses' && isSpecial) dmg = pokeRound(dmg * atkItemData.value);
+            if (atkItemData.type === 'normalGem' && moveType === 'ノーマル') dmg = pokeRound(dmg * atkItemData.value);
+            if (atkItemData.type === 'punchingGlove' && move.name.includes('パンチ')) dmg = pokeRound(dmg * atkItemData.value);
         }
 
         // マルチスケイル / ファントムガード (HP満タン時)

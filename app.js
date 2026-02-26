@@ -716,6 +716,7 @@ const CONSTANT_PRESETS = {
     'bsludge': { label: 'くろいヘドロ', fraction: -1 / 16 },
     'sitrus': { label: 'オボンのみ', fraction: -1 / 4 },
     'grassy': { label: 'グラスフィールド', fraction: -1 / 16 },
+    'rockyhelmet': { label: 'ゴツゴツメット', fraction: 1 / 6 },
 };
 
 function addConstantPreset() {

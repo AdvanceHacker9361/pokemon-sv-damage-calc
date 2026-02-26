@@ -153,12 +153,16 @@ class SearchableSelect {
 
     filter(query) {
         const q = query.toLowerCase().trim();
+        // ひらがなをカタカナに変換
+        const qKana = q.replace(/[\u3041-\u3096]/g, match =>
+            String.fromCharCode(match.charCodeAt(0) + 0x60)
+        );
 
         if (!q) {
             this.filteredItems = this.items;
         } else {
             this.filteredItems = this.items.filter(item =>
-                item.searchText.includes(q)
+                item.searchText.includes(q) || item.searchText.includes(qKana)
             );
         }
 

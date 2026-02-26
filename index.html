@@ -13,7 +13,7 @@
 
   <header class="header">
     <h1>⚔️ ポケモンSV ダメージ計算ツール</h1>
-    <p>シングルバトル専門 ― Reg.I 全ポケモン対応 v1.5</p>
+    <p>シングルバトル専門 ― Reg.I 全ポケモン対応 v1.6</p>
   </header>
 
   <div class="main-container">
@@ -71,9 +71,9 @@
         <div class="stat-label">努力値<br><span id="atk-ev-remaining" style="font-size:0.6rem;color:var(--accent)">残り:
             508</span></div>
         <input type="number" data-stat="0" value="0" min="0" max="252" step="4">
-        <input type="number" data-stat="1" value="0" min="0" max="252" step="4">
+        <input type="number" data-stat="1" value="252" min="0" max="252" step="4">
         <input type="number" data-stat="2" value="0" min="0" max="252" step="4">
-        <input type="number" data-stat="3" value="0" min="0" max="252" step="4">
+        <input type="number" data-stat="3" value="252" min="0" max="252" step="4">
         <input type="number" data-stat="4" value="0" min="0" max="252" step="4">
         <input type="number" data-stat="5" value="0" min="0" max="252" step="4">
         <div class="stat-label">個体値</div>
@@ -179,9 +179,9 @@
             508</span></div>
         <input type="number" data-stat="0" value="0" min="0" max="252" step="4">
         <input type="number" data-stat="1" value="0" min="0" max="252" step="4">
-        <input type="number" data-stat="2" value="0" min="0" max="252" step="4">
+        <input type="number" data-stat="2" value="252" min="0" max="252" step="4">
         <input type="number" data-stat="3" value="0" min="0" max="252" step="4">
-        <input type="number" data-stat="4" value="0" min="0" max="252" step="4">
+        <input type="number" data-stat="4" value="252" min="0" max="252" step="4">
         <input type="number" data-stat="5" value="0" min="0" max="252" step="4">
         <div class="stat-label">個体値</div>
         <input type="number" class="iv" data-stat="0" value="31" min="0" max="31">
@@ -299,6 +299,9 @@
               <option value="toxic3">もうどく 3T目 (3/16)</option>
               <option value="toxic4">もうどく 4T目 (4/16)</option>
               <option value="burn">やけどダメ (1/16)</option>
+            </optgroup>
+            <optgroup label="⚔️ 持ち物">
+              <option value="rockyhelmet">ゴツゴツメット (1/6)</option>
             </optgroup>
             <optgroup label="🌤 天候/フィールド">
               <option value="weather">天候ダメ (1/16)</option>

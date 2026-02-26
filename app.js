@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initRankSelectors();
     setupEventListeners();
 
+    // --- 検索可能ドロップダウン化 ---
+    initSearchableSelects();
+
     // 初期表示
     onPokemonChange('atk');
     onPokemonChange('def');
@@ -100,9 +103,54 @@ function initRankSelectors() {
     });
 }
 
-// ============================
-// イベントリスナー
-// ============================
+function initSearchableSelects() {
+    // ポケモン選択 (攻撃側・防御側)
+    ['atk-pokemon', 'def-pokemon'].forEach(id => {
+        new SearchableSelect(document.getElementById(id), {
+            placeholder: 'ポケモン名で検索...',
+        });
+    });
+
+    // 技選択 (4スロット)
+    for (let i = 1; i <= 4; i++) {
+        new SearchableSelect(document.getElementById(`move-${i}`), {
+            placeholder: '技名で検索...',
+            formatOption: (item, isDisplay) => {
+                // MoveデータからタイプとカテゴリEを取得
+                const moveIdx = parseInt(item.value);
+                if (isNaN(moveIdx) || !MOVES[moveIdx]) return item.text;
+                const move = MOVES[moveIdx];
+                const typeColor = getTypeColor(move.type);
+                if (isDisplay) {
+                    // 表示欄用 (コンパクト)
+                    return `<span class="ss-type-badge" style="background:${typeColor}">${move.type}</span> ${move.name} <span style="color:var(--text-muted);font-size:0.7rem">${move.category} 威力${move.power}</span>`;
+                }
+                // ドロップダウンリスト用
+                return `<span class="ss-type-badge" style="background:${typeColor}">${move.type}</span><span class="ss-name">${move.name}</span><span class="ss-cat">${move.category}</span><span class="ss-power">威力${move.power}</span>`;
+            }
+        });
+    }
+
+    // 持ち物も検索可能に
+    ['atk-item', 'def-item'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            new SearchableSelect(el, {
+                placeholder: '持ち物を検索...',
+            });
+        }
+    });
+
+    // 特性も検索可能に
+    ['atk-ability', 'def-ability'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            new SearchableSelect(el, {
+                placeholder: '特性を検索...',
+            });
+        }
+    });
+}
 
 function setupEventListeners() {
     // ポケモン変更

@@ -1057,3 +1057,180 @@ body {
   color: var(--text-muted);
   font-size: 0.85rem;
 }
+
+/* === 検索可能ドロップダウン === */
+.ss-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.ss-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  min-height: 1.6rem;
+  font-family: inherit;
+  user-select: none;
+}
+
+.ss-display:hover,
+.ss-display.ss-active {
+  border-color: var(--accent);
+}
+
+.ss-display-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.ss-arrow {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  margin-left: 0.3rem;
+  transition: transform 0.2s;
+}
+
+.ss-active .ss-arrow {
+  transform: rotate(180deg);
+}
+
+.ss-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: var(--bg-card);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  margin-top: 4px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  animation: ssSlide 0.15s ease;
+}
+
+@keyframes ssSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ss-dropdown.ss-open {
+  display: block;
+}
+
+.ss-search-box {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.ss-search-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.8rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.ss-search-input:focus {
+  border-color: var(--accent);
+}
+
+.ss-search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.ss-list {
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 0.25rem 0;
+}
+
+.ss-item {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: background 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ss-item:hover,
+.ss-item-highlight {
+  background: var(--bg-card-hover, #2a2a5a);
+}
+
+.ss-item-active {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.ss-no-result,
+.ss-more {
+  padding: 0.5rem 0.6rem;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* 技アイテム内のタイプバッジ */
+.ss-item .ss-type-badge {
+  display: inline-block;
+  padding: 0.05rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.ss-item .ss-cat {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.ss-item .ss-power {
+  font-size: 0.65rem;
+  color: var(--orange);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ss-item .ss-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* move-slot内のss-wrapperをflexで適切に広げる */
+.move-slot .ss-wrapper {
+  flex: 1;
+}

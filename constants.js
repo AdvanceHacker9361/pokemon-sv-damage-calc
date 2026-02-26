@@ -134,6 +134,11 @@ const ITEMS = {
     'ものしりメガネ': { type: 'wiseGlasses', value: 1.1 },
     'パンチグローブ': { type: 'punchingGlove', value: 1.1 },
     'ノーマルジュエル': { type: 'normalGem', value: 1.3 },
+
+    // 連続補正アイテム
+    'メトロノーム(最大)': { type: 'metronomeMax', value: 2.0 },
+    'メトロノーム(2回目)': { type: 'metronomeMid', value: 1.2 },
+
     // タイプ強化アイテム (1.2倍)
     'シルクのスカーフ': { type: 'typeBoostItem', boostType: 'ノーマル', value: 1.2 },
     'もくたん': { type: 'typeBoostItem', boostType: 'ほのお', value: 1.2 },
@@ -147,17 +152,38 @@ const ITEMS = {
     'するどいくちばし': { type: 'typeBoostItem', boostType: 'ひこう', value: 1.2 },
     'まがったスプーン': { type: 'typeBoostItem', boostType: 'エスパー', value: 1.2 },
     'ぎんのこな': { type: 'typeBoostItem', boostType: 'むし', value: 1.2 },
-    'かたいいわ': { type: 'typeBoostItem', boostType: 'いわ', value: 1.2 },
+    'かたいいし': { type: 'typeBoostItem', boostType: 'いわ', value: 1.2 },
     'のろいのおふだ': { type: 'typeBoostItem', boostType: 'ゴースト', value: 1.2 },
     'りゅうのキバ': { type: 'typeBoostItem', boostType: 'ドラゴン', value: 1.2 },
     'くろいメガネ': { type: 'typeBoostItem', boostType: 'あく', value: 1.2 },
     'メタルコート': { type: 'typeBoostItem', boostType: 'はがね', value: 1.2 },
     'せいれいプレート': { type: 'typeBoostItem', boostType: 'フェアリー', value: 1.2 },
+    'こぶしのプレート': { type: 'typeBoostItem', boostType: 'かくとう', value: 1.2 },
+
+    // 半減実
+    'オッカのみ': { type: 'resistBerry', resistType: 'ほのお' },
+    'イトケのみ': { type: 'resistBerry', resistType: 'みず' },
+    'ソクノのみ': { type: 'resistBerry', resistType: 'でんき' },
+    'リンドのみ': { type: 'resistBerry', resistType: 'くさ' },
+    'ヤチェのみ': { type: 'resistBerry', resistType: 'こおり' },
+    'ヨプのみ': { type: 'resistBerry', resistType: 'かくとう' },
+    'ビアーのみ': { type: 'resistBerry', resistType: 'どく' },
+    'シュカのみ': { type: 'resistBerry', resistType: 'じめん' },
+    'バコウのみ': { type: 'resistBerry', resistType: 'ひこう' },
+    'ウタンのみ': { type: 'resistBerry', resistType: 'エスパー' },
+    'タンガのみ': { type: 'resistBerry', resistType: 'むし' },
+    'ヨロギのみ': { type: 'resistBerry', resistType: 'いわ' },
+    'カシブのみ': { type: 'resistBerry', resistType: 'ゴースト' },
+    'ハバンのみ': { type: 'resistBerry', resistType: 'ドラゴン' },
+    'ナモのみ': { type: 'resistBerry', resistType: 'あく' },
+    'リリバのみ': { type: 'resistBerry', resistType: 'はがね' },
+    'ロゼルのみ': { type: 'resistBerry', resistType: 'フェアリー' },
+    'ホズのみ': { type: 'resistBerry', resistType: 'ノーマル' }, // ノーマル半減
+
     // おめん (オーガポン 1.2倍)
     'いどのめん': { type: 'typeBoostItem', boostType: 'みず', value: 1.2 },
     'かまどのめん': { type: 'typeBoostItem', boostType: 'ほのお', value: 1.2 },
     'いしずえのめん': { type: 'typeBoostItem', boostType: 'いわ', value: 1.2 },
-    // オーガポン（みどりのめん）は特性のおもかげやどしで強化される
 
     // その他
     'こだわりスカーフ': { type: 'none' }, // ダメージ影響なし
@@ -172,21 +198,6 @@ const ITEMS = {
     'フィラのみ': { type: 'none' },
     'ブーストエナジー': { type: 'boosterEnergy' },
     'でんきだま': { type: 'none' },
-    'きせきのタネ': { type: 'typePower', moveType: 'くさ', value: 1.2 },
-    'とけないこおり': { type: 'typePower', moveType: 'こおり', value: 1.2 },
-    'くろおび': { type: 'typePower', moveType: 'かくとう', value: 1.2 },
-    'どくバリ': { type: 'typePower', moveType: 'どく', value: 1.2 },
-    'やわらかいすな': { type: 'typePower', moveType: 'じめん', value: 1.2 },
-    'するどいくちばし': { type: 'typePower', moveType: 'ひこう', value: 1.2 },
-    'まがったスプーン': { type: 'typePower', moveType: 'エスパー', value: 1.2 },
-    'ぎんのこな': { type: 'typePower', moveType: 'むし', value: 1.2 },
-    'かたいいし': { type: 'typePower', moveType: 'いわ', value: 1.2 },
-    'のろいのおふだ': { type: 'typePower', moveType: 'ゴースト', value: 1.2 },
-    'りゅうのキバ': { type: 'typePower', moveType: 'ドラゴン', value: 1.2 },
-    'くろいメガネ': { type: 'typePower', moveType: 'あく', value: 1.2 },
-    'メタルコート': { type: 'typePower', moveType: 'はがね', value: 1.2 },
-    // プレート系
-    'こぶしのプレート': { type: 'typePower', moveType: 'かくとう', value: 1.2 },
     'くちたけん': { type: 'rustedSword' },
     'くちたたて': { type: 'rustedShield' },
     'こころのしずく': { type: 'soulDew', value: 1.2 },

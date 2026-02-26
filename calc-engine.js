@@ -308,7 +308,7 @@ function calculateDamage(params) {
             if (isSpecial && (isLightScreen || isAuroraVeil)) dmg = pokeRound(dmg * 0.5);
         }
 
-        // ---- いのちのたま ----
+        // ---- いのちのたま 等火力アップアイテム ----
         if (atkItemData) {
             if (atkItemData.type === 'lifeOrb') dmg = pokeRound(dmg * atkItemData.value);
             if (atkItemData.type === 'expertBelt' && effectiveness > 1) dmg = pokeRound(dmg * atkItemData.value);
@@ -317,6 +317,16 @@ function calculateDamage(params) {
             if (atkItemData.type === 'wiseGlasses' && isSpecial) dmg = pokeRound(dmg * atkItemData.value);
             if (atkItemData.type === 'normalGem' && moveType === 'ノーマル') dmg = pokeRound(dmg * atkItemData.value);
             if (atkItemData.type === 'punchingGlove' && move.name.includes('パンチ')) dmg = pokeRound(dmg * atkItemData.value);
+            if (atkItemData.type === 'metronomeMax') dmg = pokeRound(dmg * atkItemData.value);
+            if (atkItemData.type === 'metronomeMid') dmg = pokeRound(dmg * atkItemData.value);
+            if (atkItemData.type === 'soulDew' && (moveType === 'エスパー' || moveType === 'ドラゴン')) dmg = pokeRound(dmg * atkItemData.value);
+        }
+
+        // 半減実
+        if (defItemData && defItemData.type === 'resistBerry') {
+            if (defItemData.resistType === moveType && (effectiveness > 1 || moveType === 'ノーマル')) {
+                dmg = pokeRound(dmg * 0.5);
+            }
         }
 
         // マルチスケイル / ファントムガード (HP満タン時)

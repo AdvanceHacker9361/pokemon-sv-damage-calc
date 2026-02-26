@@ -132,6 +132,11 @@ class SearchableSelect {
         this.searchInput.value = '';
         this.filter('');
         this.highlightedIndex = -1;
+
+        // Z-index stacking context fix
+        const panel = this.wrapper.closest('.panel');
+        if (panel) panel.style.zIndex = '999';
+
         // フォーカス
         setTimeout(() => this.searchInput.focus(), 10);
     }
@@ -140,6 +145,10 @@ class SearchableSelect {
         this.isOpen = false;
         this.dropdown.classList.remove('ss-open');
         this.display.classList.remove('ss-active');
+
+        // Z-index stacking context fix
+        const panel = this.wrapper.closest('.panel');
+        if (panel) panel.style.zIndex = '';
     }
 
     filter(query) {

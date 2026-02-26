@@ -104,6 +104,7 @@ function initRankSelectors() {
 }
 
 function initSearchableSelects() {
+    console.log("initSearchableSelects executing...");
     // ポケモン選択 (攻撃側・防御側)
     ['atk-pokemon', 'def-pokemon'].forEach(id => {
         new SearchableSelect(document.getElementById(id), {
